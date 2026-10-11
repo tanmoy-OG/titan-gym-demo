@@ -7,7 +7,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ImageWithFallback from '@/components/ImageWithFallback';
 import ColoredTick from '@/components/ColoredTick';
-import MapsGroundingWidget from '@/components/MapsGroundingWidget';
 import { BRANCHES_DATA, Branch } from '@/data/gymData';
 import {
   MapPin,
@@ -49,34 +48,36 @@ function BranchDetailsContent() {
 
   return (
     <div className="min-h-screen bg-[#08090d] text-white flex flex-col">
-      <Header />
-
-      <main className="flex-1">
-        {/* Branch Selector Bar */}
-        <section className="bg-[#0b0d14] border-b border-white/10 sticky top-[72px] z-30 py-3 backdrop-blur-md">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between gap-4 overflow-x-auto no-scrollbar py-1">
-              <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 shrink-0">
-                Select Branch:
-              </span>
-              <div className="flex items-center gap-2">
-                {BRANCHES_DATA.map((b) => (
-                  <button
-                    key={b.id}
-                    onClick={() => setUserSelectedBranchId(b.id)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
-                      selectedBranch.id === b.id
-                        ? 'bg-lime-400 text-black shadow-[0_0_15px_rgba(163,230,53,0.3)]'
-                        : 'bg-white/5 text-zinc-300 hover:bg-white/10 border border-white/10'
-                    }`}
-                  >
-                    {b.name.replace('Titan ', '')}
-                  </button>
-                ))}
+      <Header
+        subBar={
+          <div className="bg-[#0b0d14]/95 border-b border-white/10 py-3 backdrop-blur-md">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between gap-4 overflow-x-auto no-scrollbar py-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-zinc-400 shrink-0">
+                  Select Branch:
+                </span>
+                <div className="flex items-center gap-2">
+                  {BRANCHES_DATA.map((b) => (
+                    <button
+                      key={b.id}
+                      onClick={() => setUserSelectedBranchId(b.id)}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+                        selectedBranch.id === b.id
+                          ? 'bg-lime-400 text-black shadow-[0_0_15px_rgba(163,230,53,0.3)]'
+                          : 'bg-white/5 text-zinc-300 hover:bg-white/10 border border-white/10'
+                      }`}
+                    >
+                      {b.name.replace('Titan ', '')}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </section>
+        }
+      />
+
+      <main className="flex-1">
 
         {/* Branch Header Banner */}
         <section className="py-12 bg-gradient-to-b from-[#0b0d14] to-[#08090d] border-b border-white/5">
@@ -221,9 +222,6 @@ function BranchDetailsContent() {
                     <p className="text-xs text-zinc-300 font-mono">{selectedBranch.hours}</p>
                   </div>
                 </div>
-
-                {/* Google Maps Grounding Widget */}
-                <MapsGroundingWidget branch={selectedBranch} />
               </div>
 
               {/* Interactive Map Canvas Embed */}

@@ -30,6 +30,8 @@ export interface ProgramItem {
   intensity: 'Medium' | 'High' | 'Extreme';
   suitableFor: string;
   includedInTiers: string[];
+  monthlyPrice: number;
+  annualPrice: number;
 }
 
 export interface SubscriptionPlan {
@@ -206,30 +208,71 @@ export const BRANCHES_DATA: Branch[] = [
   },
 ];
 
-export const MINIMAL_PROGRAMS = [
+export interface MinimalProgram {
+  tier: 'Silver' | 'Gold' | 'Platinum';
+  title: string;
+  subject: string;
+  highlight: string;
+  color: string;
+  border: string;
+  cardBg: string;
+  radialGlow: string;
+  shadowGlow: string;
+  shimmerClass: string;
+  shimmerGradient: string;
+  accentText: string;
+  accentHover: string;
+  dotGlow: string;
+}
+
+export const MINIMAL_PROGRAMS: MinimalProgram[] = [
   {
     tier: 'Silver',
     title: 'Silver Foundation',
     subject: 'Complete access to cardio, free-weight floors, luxury locker rooms, and standard off-peak group studios.',
     highlight: 'Essential Gym Access',
-    color: 'from-slate-400 to-zinc-500',
-    border: 'border-slate-500/30',
+    color: 'from-slate-200 via-zinc-400 to-slate-300',
+    border: 'border-slate-400/35 hover:border-slate-300/80',
+    cardBg: 'bg-gradient-to-br from-[#181c26] via-[#10131b] to-[#141722]',
+    radialGlow: 'radial-gradient(circle at 85% 15%, rgba(203, 213, 225, 0.16) 0%, transparent 60%), radial-gradient(circle at 15% 85%, rgba(148, 163, 184, 0.08) 0%, transparent 50%)',
+    shadowGlow: 'shadow-[0_4px_30px_rgba(0,0,0,0.6),0_0_25px_rgba(203,213,225,0.08)] hover:shadow-[0_8px_35px_rgba(0,0,0,0.7),0_0_35px_rgba(226,232,240,0.22)]',
+    shimmerClass: 'animate-shimmer-silver',
+    shimmerGradient: 'bg-gradient-to-r from-transparent via-white/25 to-transparent',
+    accentText: 'text-slate-300',
+    accentHover: 'group-hover:text-slate-100',
+    dotGlow: 'shadow-[0_0_12px_rgba(203,213,225,0.7)]',
   },
   {
     tier: 'Gold',
     title: 'Gold All-Access',
     subject: 'Unlimited access across all city branches, priority group fitness, biometric body scanning, and sauna suites.',
     highlight: 'Most Popular Member Choice',
-    color: 'from-amber-400 to-yellow-600',
-    border: 'border-amber-500/40',
+    color: 'from-amber-300 via-yellow-400 to-amber-500',
+    border: 'border-amber-500/45 hover:border-amber-400/90',
+    cardBg: 'bg-gradient-to-br from-[#271d0e] via-[#151108] to-[#20180a]',
+    radialGlow: 'radial-gradient(circle at 85% 15%, rgba(245, 158, 11, 0.22) 0%, transparent 60%), radial-gradient(circle at 15% 85%, rgba(217, 119, 6, 0.14) 0%, transparent 50%)',
+    shadowGlow: 'shadow-[0_4px_30px_rgba(0,0,0,0.6),0_0_30px_rgba(245,158,11,0.18)] hover:shadow-[0_8px_35px_rgba(0,0,0,0.7),0_0_45px_rgba(251,191,36,0.35)]',
+    shimmerClass: 'animate-shimmer-gold',
+    shimmerGradient: 'bg-gradient-to-r from-transparent via-amber-200/30 to-transparent',
+    accentText: 'text-amber-400',
+    accentHover: 'group-hover:text-amber-300',
+    dotGlow: 'shadow-[0_0_12px_rgba(245,158,11,0.8)]',
   },
   {
     tier: 'Platinum',
     title: 'Platinum Elite',
     subject: 'VIP 24/7 universal pass, dedicated personal coach sessions, Hyrox tournament access, and private recovery contrast baths.',
     highlight: 'Ultimate High-Performance',
-    color: 'from-cyan-400 to-blue-600',
-    border: 'border-cyan-500/40',
+    color: 'from-cyan-300 via-sky-300 to-blue-400',
+    border: 'border-cyan-400/45 hover:border-cyan-300/90',
+    cardBg: 'bg-gradient-to-br from-[#0e2034] via-[#091321] to-[#12263d]',
+    radialGlow: 'radial-gradient(circle at 85% 15%, rgba(56, 189, 248, 0.22) 0%, transparent 60%), radial-gradient(circle at 15% 85%, rgba(165, 243, 252, 0.12) 0%, transparent 50%)',
+    shadowGlow: 'shadow-[0_4px_30px_rgba(0,0,0,0.6),0_0_30px_rgba(56,189,248,0.18)] hover:shadow-[0_8px_35px_rgba(0,0,0,0.7),0_0_45px_rgba(56,189,248,0.35)]',
+    shimmerClass: 'animate-shimmer-platinum',
+    shimmerGradient: 'bg-gradient-to-r from-transparent via-cyan-100/30 to-transparent',
+    accentText: 'text-cyan-300',
+    accentHover: 'group-hover:text-cyan-200',
+    dotGlow: 'shadow-[0_0_12px_rgba(56,189,248,0.8)]',
   },
 ];
 
@@ -238,8 +281,8 @@ export const DETAILED_SUBSCRIPTIONS: SubscriptionPlan[] = [
     id: 'silver-plan',
     name: 'Silver',
     badge: 'Essential',
-    monthlyPrice: 59,
-    annualPrice: 49,
+    monthlyPrice: 2499,
+    annualPrice: 1999,
     period: 'per month',
     tagline: 'Ideal for independent lifters seeking top-of-the-line gym equipment and locker room amenities.',
     image: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1470&auto=format&fit=crop',
@@ -259,8 +302,8 @@ export const DETAILED_SUBSCRIPTIONS: SubscriptionPlan[] = [
     name: 'Gold',
     badge: 'Most Popular',
     popular: true,
-    monthlyPrice: 99,
-    annualPrice: 79,
+    monthlyPrice: 3999,
+    annualPrice: 3199,
     period: 'per month',
     tagline: 'Universal multi-branch access with limitless group fitness, Zumba, HIIT, and recovery amenities.',
     image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop',
@@ -280,8 +323,8 @@ export const DETAILED_SUBSCRIPTIONS: SubscriptionPlan[] = [
     id: 'elite-plan',
     name: 'Elite',
     badge: 'Comprehensive',
-    monthlyPrice: 159,
-    annualPrice: 129,
+    monthlyPrice: 6999,
+    annualPrice: 5599,
     period: 'per month',
     tagline: 'The gold standard in athletic conditioning. Full coaching access, Hyrox prep, and luxury perks.',
     image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=1469&auto=format&fit=crop',
@@ -318,6 +361,8 @@ export const ALL_PROGRAMS: ProgramItem[] = [
     intensity: 'Medium',
     suitableFor: 'Beginners to intermediate fitness enthusiasts',
     includedInTiers: ['Silver', 'Gold', 'Elite'],
+    monthlyPrice: 2499,
+    annualPrice: 1999,
   },
   {
     id: 'prog-gold',
@@ -337,6 +382,8 @@ export const ALL_PROGRAMS: ProgramItem[] = [
     intensity: 'High',
     suitableFor: 'Consistent gym-goers looking for variety and cross-training',
     includedInTiers: ['Gold', 'Elite'],
+    monthlyPrice: 3999,
+    annualPrice: 3199,
   },
   {
     id: 'prog-platinum',
@@ -356,6 +403,8 @@ export const ALL_PROGRAMS: ProgramItem[] = [
     intensity: 'Extreme',
     suitableFor: 'Serious competitors, executives, and high-performance athletes',
     includedInTiers: ['Elite'],
+    monthlyPrice: 6999,
+    annualPrice: 5599,
   },
   {
     id: 'prog-personal-training',
@@ -375,6 +424,8 @@ export const ALL_PROGRAMS: ProgramItem[] = [
     intensity: 'High',
     suitableFor: 'Anyone seeking accelerated results and targeted accountability',
     includedInTiers: ['Elite (included)', 'Silver/Gold (add-on)'],
+    monthlyPrice: 7999,
+    annualPrice: 6499,
   },
   {
     id: 'prog-group-classes',
@@ -394,6 +445,8 @@ export const ALL_PROGRAMS: ProgramItem[] = [
     intensity: 'High',
     suitableFor: 'Those who thrive on community motivation and team camaraderie',
     includedInTiers: ['Gold', 'Elite'],
+    monthlyPrice: 2499,
+    annualPrice: 1999,
   },
   {
     id: 'prog-hiit-training',
@@ -413,6 +466,8 @@ export const ALL_PROGRAMS: ProgramItem[] = [
     intensity: 'Extreme',
     suitableFor: 'Athletes focused on fat loss, stamina, and cardiovascular resilience',
     includedInTiers: ['Gold', 'Elite'],
+    monthlyPrice: 2799,
+    annualPrice: 2199,
   },
   {
     id: 'prog-game-preparation',
@@ -432,6 +487,8 @@ export const ALL_PROGRAMS: ProgramItem[] = [
     intensity: 'Extreme',
     suitableFor: 'Competitive athletes, collegiate players, and martial artists',
     includedInTiers: ['Elite', 'Specialty Registration'],
+    monthlyPrice: 3999,
+    annualPrice: 3199,
   },
   {
     id: 'prog-weightloss-program',
@@ -451,6 +508,8 @@ export const ALL_PROGRAMS: ProgramItem[] = [
     intensity: 'Medium',
     suitableFor: 'Members pursuing significant, permanent body fat reduction',
     includedInTiers: ['Gold', 'Elite', 'Dedicated Camp'],
+    monthlyPrice: 3499,
+    annualPrice: 2799,
   },
   {
     id: 'prog-hyrox-program',
@@ -470,6 +529,8 @@ export const ALL_PROGRAMS: ProgramItem[] = [
     intensity: 'Extreme',
     suitableFor: 'Endurance athletes, hybrid lifters, and Hyrox racers',
     includedInTiers: ['Elite', 'Hyrox Squad Add-on'],
+    monthlyPrice: 4499,
+    annualPrice: 3599,
   },
   {
     id: 'prog-zumba',
@@ -489,6 +550,8 @@ export const ALL_PROGRAMS: ProgramItem[] = [
     intensity: 'Medium',
     suitableFor: 'All fitness levels, dance lovers, and cardio enthusiasts',
     includedInTiers: ['Gold', 'Elite'],
+    monthlyPrice: 1999,
+    annualPrice: 1599,
   },
 ];
 

@@ -9,6 +9,40 @@ import ImageWithFallback from '@/components/ImageWithFallback';
 import { DETAILED_SUBSCRIPTIONS } from '@/data/gymData';
 import { Check, X, ArrowRight, ShieldCheck, HelpCircle } from 'lucide-react';
 
+const getDetailedTierStyles = (planId: string) => {
+  if (planId === 'silver-plan') {
+    return {
+      cardBg: 'bg-gradient-to-br from-[#181c26] via-[#10131b] to-[#141722]',
+      radialGlow: 'radial-gradient(circle at 85% 15%, rgba(203, 213, 225, 0.14) 0%, transparent 60%)',
+      border: 'border-slate-400/35 hover:border-slate-300/80',
+      shimmerClass: 'animate-shimmer-silver',
+      shimmerGradient: 'bg-gradient-to-r from-transparent via-white/20 to-transparent',
+      shadow: 'shadow-[0_4px_30px_rgba(0,0,0,0.5),0_0_20px_rgba(203,213,225,0.08)] hover:shadow-[0_0_35px_rgba(203,213,225,0.22)]',
+      badgeColor: 'text-slate-300',
+    };
+  }
+  if (planId === 'gold-plan') {
+    return {
+      cardBg: 'bg-gradient-to-br from-[#271d0e] via-[#151108] to-[#20180a]',
+      radialGlow: 'radial-gradient(circle at 85% 15%, rgba(245, 158, 11, 0.22) 0%, transparent 60%)',
+      border: 'border-amber-500/45 hover:border-amber-400/90',
+      shimmerClass: 'animate-shimmer-gold',
+      shimmerGradient: 'bg-gradient-to-r from-transparent via-amber-200/25 to-transparent',
+      shadow: 'shadow-[0_4px_30px_rgba(0,0,0,0.5),0_0_25px_rgba(245,158,11,0.16)] hover:shadow-[0_0_40px_rgba(251,191,36,0.32)] ring-1 ring-amber-400/30',
+      badgeColor: 'text-amber-400',
+    };
+  }
+  return {
+    cardBg: 'bg-gradient-to-br from-[#0e2034] via-[#091321] to-[#12263d]',
+    radialGlow: 'radial-gradient(circle at 85% 15%, rgba(56, 189, 248, 0.22) 0%, transparent 60%)',
+    border: 'border-cyan-400/45 hover:border-cyan-300/90',
+    shimmerClass: 'animate-shimmer-platinum',
+    shimmerGradient: 'bg-gradient-to-r from-transparent via-cyan-100/25 to-transparent',
+    shadow: 'shadow-[0_4px_30px_rgba(0,0,0,0.5),0_0_25px_rgba(56,189,248,0.16)] hover:shadow-[0_0_40px_rgba(56,189,248,0.32)]',
+    badgeColor: 'text-cyan-300',
+  };
+};
+
 export default function PlanPage() {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
 
@@ -79,22 +113,32 @@ export default function PlanPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {DETAILED_SUBSCRIPTIONS.map((plan) => {
               const price = billingCycle === 'annual' ? plan.annualPrice : plan.monthlyPrice;
+              const styles = getDetailedTierStyles(plan.id);
               return (
                 <div
                   key={plan.id}
-                  className={`bg-[#0f111a] rounded-3xl p-8 border ${
-                    plan.popular
-                      ? 'border-lime-400/50 shadow-[0_0_30px_rgba(163,230,53,0.15)] ring-1 ring-lime-400/30'
-                      : 'border-white/10 shadow-xl'
-                  } flex flex-col justify-between`}
+                  className={`relative rounded-3xl overflow-hidden p-8 border ${styles.border} ${styles.cardBg} ${styles.shadow} flex flex-col justify-between group hover:-translate-y-1.5 transition-all duration-500`}
                 >
-                  <div className="space-y-6">
+                  {/* Subtle Ambient Radial Glow */}
+                  <div
+                    className="pointer-events-none absolute inset-0 opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{ background: styles.radialGlow }}
+                  />
+
+                  {/* Metallic Shimmer Sweep Light Beam */}
+                  <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                    <div
+                      className={`absolute -top-12 -bottom-12 w-48 ${styles.shimmerGradient} ${styles.shimmerClass} blur-[1px] opacity-70 group-hover:opacity-100 transition-opacity duration-300`}
+                    />
+                  </div>
+
+                  <div className="relative z-10 space-y-6">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-lime-400">
+                      <span className={`text-xs font-mono font-bold uppercase tracking-wider ${styles.badgeColor}`}>
                         {plan.badge}
                       </span>
                       {plan.popular && (
-                        <span className="px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider bg-lime-400 text-black rounded-full">
+                        <span className="px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider bg-amber-400 text-black rounded-full shadow-md">
                           Top Choice
                         </span>
                       )}
@@ -107,13 +151,20 @@ export default function PlanPage() {
                       <p className="text-xs text-zinc-400 mt-1">{plan.accessScope}</p>
                     </div>
 
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-5xl font-black text-white font-mono tabular-nums">
-                        ${price}
-                      </span>
-                      <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                        / month {billingCycle === 'annual' ? '(billed annually)' : ''}
-                      </span>
+                    <div className="space-y-1">
+                      <div className="flex items-baseline gap-2 whitespace-nowrap">
+                        <span className="text-4xl sm:text-5xl font-black text-white font-mono tabular-nums tracking-tight">
+                          ₹{price.toLocaleString('en-IN')}
+                        </span>
+                        <span className="text-xs text-zinc-300 font-bold uppercase tracking-wider">
+                          / month
+                        </span>
+                      </div>
+                      <p className="text-[11px] font-mono text-zinc-400">
+                        {billingCycle === 'annual'
+                          ? `Billed annually at ₹${(price * 12).toLocaleString('en-IN')} / yr (Save ~20%)`
+                          : `Or ₹${plan.annualPrice.toLocaleString('en-IN')} / mo if billed annually`}
+                      </p>
                     </div>
 
                     <p className="text-xs text-zinc-300 leading-relaxed">{plan.tagline}</p>
@@ -125,7 +176,7 @@ export default function PlanPage() {
                       <ul className="space-y-2.5">
                         {plan.features.map((feat, idx) => (
                           <li key={idx} className="flex items-start gap-2.5 text-xs text-zinc-200">
-                            <ColoredTick color="lime" size="sm" className="mt-0.5" />
+                            <ColoredTick color={plan.id === 'gold-plan' ? 'amber' : plan.id === 'silver-plan' ? 'slate' : 'cyan'} size="sm" className="mt-0.5" />
                             <span className="leading-snug">{feat}</span>
                           </li>
                         ))}
@@ -133,10 +184,16 @@ export default function PlanPage() {
                     </div>
                   </div>
 
-                  <div className="pt-8 mt-6 border-t border-white/5">
+                  <div className="relative z-10 pt-8 mt-6 border-t border-white/10">
                     <Link
                       href={`/payment?plan=${plan.id}&billing=${billingCycle}`}
-                      className="w-full py-3.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-black font-black uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(163,230,53,0.3)]"
+                      className={`w-full py-3.5 rounded-xl font-black uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2 ${
+                        plan.id === 'gold-plan'
+                          ? 'bg-amber-400 hover:bg-amber-300 text-black shadow-[0_0_20px_rgba(245,158,11,0.3)]'
+                          : plan.id === 'silver-plan'
+                          ? 'bg-slate-200 hover:bg-white text-black shadow-[0_0_20px_rgba(203,213,225,0.2)]'
+                          : 'bg-cyan-400 hover:bg-cyan-300 text-black shadow-[0_0_20px_rgba(56,189,248,0.3)]'
+                      }`}
                     >
                       <span>Choose {plan.name} Pass</span>
                       <ArrowRight size={14} />

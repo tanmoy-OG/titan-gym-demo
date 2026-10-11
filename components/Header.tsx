@@ -3,9 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Sparkles, MapPin } from 'lucide-react';
+import { Menu, X, MapPin } from 'lucide-react';
 
-export const Header: React.FC = () => {
+interface HeaderProps {
+  subBar?: React.ReactNode;
+}
+
+export const Header: React.FC<HeaderProps> = ({ subBar }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -29,14 +33,15 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-        isScrolled
-          ? 'bg-[#08090d]/95 backdrop-blur-md border-b border-white/10 shadow-2xl py-3.5'
-          : 'bg-gradient-to-b from-[#08090d]/90 to-transparent backdrop-blur-sm border-b border-white/5 py-5'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full">
+      <div
+        className={`w-full transition-all duration-300 ${
+          isScrolled || pathname !== '/' || Boolean(subBar)
+            ? 'bg-[#08090d]/95 backdrop-blur-md py-3.5'
+            : 'bg-gradient-to-b from-[#08090d]/90 to-transparent backdrop-blur-sm py-5'
+        } ${subBar ? 'border-b border-white/10' : (isScrolled ? 'border-b border-white/10 shadow-2xl' : 'border-b border-white/5')}`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-6">
           {/* Zone 1: Single text element wordmark */}
           <Link
@@ -64,14 +69,6 @@ export const Header: React.FC = () => {
 
           {/* Zone 3: 1 primary action */}
           <div className="hidden sm:flex items-center gap-3 shrink-0">
-            <Link
-              href="/ai-studio"
-              className="px-3.5 py-2 text-xs font-bold text-lime-400 bg-lime-500/10 border border-lime-400/25 rounded-md hover:bg-lime-500/20 transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0"
-              title="AI Workout Avatar & Visualizer"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              AI Fit Studio
-            </Link>
             <Link
               href="/payment"
               className="px-5 py-2 text-xs font-bold text-black uppercase tracking-wider bg-lime-400 rounded-md hover:bg-lime-300 transition-all shadow-[0_0_20px_rgba(163,230,53,0.3)] whitespace-nowrap shrink-0"
@@ -117,13 +114,6 @@ export const Header: React.FC = () => {
               ))}
               <div className="pt-2 border-t border-white/10 flex flex-col gap-2">
                 <Link
-                  href="/ai-studio"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2 text-xs font-bold text-lime-400 bg-lime-500/10 border border-lime-400/25 rounded-md"
-                >
-                  AI Fit Studio & Image Generator
-                </Link>
-                <Link
                   href="/payment"
                   onClick={() => setMobileMenuOpen(false)}
                   className="w-full text-center py-2.5 text-xs font-bold text-black uppercase tracking-wider bg-lime-400 rounded-md shadow-lg"
@@ -134,7 +124,14 @@ export const Header: React.FC = () => {
             </nav>
           </div>
         )}
+        </div>
       </div>
+
+      {subBar && (
+        <div className="w-full">
+          {subBar}
+        </div>
+      )}
     </header>
   );
 };

@@ -1,7 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { GYM_INFO, BRANCHES_DATA } from '@/data/gymData';
-import { Dumbbell, Phone, Mail, Clock, MessageSquare, ShieldCheck } from 'lucide-react';
+import { Dumbbell, Phone, Mail, Clock, ShieldCheck } from 'lucide-react';
+import WhatsAppIcon from '@/components/WhatsAppIcon';
 
 export const Footer: React.FC = () => {
   return (
@@ -115,9 +116,9 @@ export const Footer: React.FC = () => {
                 href={`https://wa.me/${GYM_INFO.whatsappNumber.replace(/[^0-9]/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 hover:bg-emerald-600/30 text-xs font-bold transition-all w-full justify-center"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 hover:bg-emerald-600/30 hover:border-emerald-400 text-xs font-bold transition-all w-full justify-center group"
               >
-                <MessageSquare className="w-4 h-4" />
+                <WhatsAppIcon className="w-4 h-4 shrink-0 transition-transform group-hover:scale-110" />
                 <span>Chat on WhatsApp</span>
               </a>
             </div>

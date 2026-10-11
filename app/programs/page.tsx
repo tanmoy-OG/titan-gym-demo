@@ -165,19 +165,77 @@ export default function ProgramsPage() {
                         </ul>
                       </div>
 
-                      <div className="pt-4 flex flex-wrap items-center gap-4">
-                        <Link
-                          href={`/payment?program=${prog.slug}`}
-                          className="px-6 py-3.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-black font-black uppercase text-xs tracking-wider transition-all shadow-[0_0_20px_rgba(163,230,53,0.3)] flex items-center gap-2"
-                        >
-                          <span>Enroll In {prog.title}</span>
-                          <ArrowRight size={14} />
-                        </Link>
+                      {/* Standalone Program Pricing & Payment CTA */}
+                      <div className="pt-2 p-6 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col gap-4">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-lime-400">
+                            {prog.category === 'Tier' ? 'All-Access Membership Tier' : 'Standalone Program Pass'}
+                          </span>
+                          <span className="text-[10px] px-2.5 py-0.5 rounded bg-lime-400/10 text-lime-300 border border-lime-400/20 font-bold uppercase">
+                            {prog.category === 'Tier' ? 'Full Facility Access' : 'No Package Needed'}
+                          </span>
+                        </div>
+                        
+                        <div className="space-y-1">
+                          {/* Line 1: ₹price / month on one single line */}
+                          <div className="flex items-baseline gap-2 whitespace-nowrap">
+                            <span className="text-3xl sm:text-4xl font-black text-white font-mono tabular-nums tracking-tight">
+                              ₹{prog.monthlyPrice.toLocaleString('en-IN')}
+                            </span>
+                            <span className="text-xs sm:text-sm text-zinc-300 font-bold uppercase tracking-wider">
+                              / month
+                            </span>
+                          </div>
+
+                          {/* Line 2: Monthly price if annual is chosen */}
+                          <div className="text-xs font-mono text-zinc-400 flex flex-wrap items-center gap-2">
+                            <span>₹{prog.annualPrice.toLocaleString('en-IN')} / month if billed annually</span>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-lime-400/10 text-lime-400 font-bold">
+                              Save ~20%
+                            </span>
+                          </div>
+                        </div>
+
+                        <p className="text-xs text-zinc-400 leading-relaxed">
+                          {prog.category === 'Tier'
+                            ? `All-inclusive multi-facility membership including ${prog.title} privileges`
+                            : `Full standalone access to all ${prog.title} curriculum & equipment`}
+                        </p>
+
+                        {/* Button moved to the bottom of the div */}
+                        <div className="pt-1">
+                          <Link
+                            href={
+                              prog.category === 'Tier'
+                                ? `/payment?plan=${prog.slug === 'silver' ? 'silver-plan' : prog.slug === 'gold' ? 'gold-plan' : 'elite-plan'}`
+                                : `/payment?program=${prog.slug}`
+                            }
+                            className="w-full py-4 rounded-xl bg-lime-400 hover:bg-lime-300 text-black font-black uppercase text-xs tracking-wider transition-all shadow-[0_0_20px_rgba(163,230,53,0.3)] flex items-center justify-center gap-2 group/btn"
+                          >
+                            <span>
+                              {prog.category === 'Tier' ? `Choose ${prog.title} Tier Pass` : `Buy ${prog.title} Pass`}
+                            </span>
+                            <ArrowRight size={15} className="group-hover/btn:translate-x-1 transition-transform" />
+                          </Link>
+                        </div>
+                      </div>
+
+                      <div className="pt-2 flex flex-wrap items-center gap-2 text-xs text-zinc-400">
+                        <span className="text-[11px] text-zinc-400">
+                          {prog.category === 'Tier' ? 'Tier classification:' : 'Also included in membership packages:'}
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {prog.includedInTiers.map((t, idx) => (
+                            <span key={idx} className="px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-zinc-300 font-mono text-[10px]">
+                              {t}
+                            </span>
+                          ))}
+                        </div>
                         <a
                           href="/plan-page"
-                          className="px-5 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 font-bold uppercase text-xs tracking-wider transition-all"
+                          className="sm:ml-auto text-lime-400 hover:text-lime-300 hover:underline font-bold uppercase tracking-wider text-[11px]"
                         >
-                          Compare In Plans ↗
+                          Compare All-Inclusive Bundles ↗
                         </a>
                       </div>
                     </div>

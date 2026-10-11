@@ -85,10 +85,10 @@ export const MemberAuthModal: React.FC<MemberAuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-[#0f111a] border border-white/10 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl relative my-8">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6">
+      <div className="bg-[#0f111a] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[90vh] sm:max-h-[88vh] flex flex-col overflow-hidden shadow-2xl relative">
         {/* Header */}
-        <div className="p-6 border-b border-white/10 flex items-center justify-between">
+        <div className="p-5 sm:p-6 border-b border-white/10 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-lime-400" />
             <h3 className="text-lg font-bold text-white uppercase tracking-tight">
@@ -97,7 +97,7 @@ export const MemberAuthModal: React.FC<MemberAuthModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="text-zinc-400 hover:text-white p-1 rounded-md bg-white/5 border border-white/10"
+            className="text-zinc-400 hover:text-white p-1 rounded-md bg-white/5 border border-white/10 transition-colors"
           >
             <X size={18} />
           </button>
@@ -105,7 +105,7 @@ export const MemberAuthModal: React.FC<MemberAuthModalProps> = ({
 
         {/* Step 1: Member Authentication */}
         {!isAuthenticated ? (
-          <div className="p-6 sm:p-8 space-y-6">
+          <div className="p-6 sm:p-8 space-y-6 flex-1 min-h-0 overflow-y-auto">
             <div className="bg-lime-400/10 border border-lime-400/20 rounded-xl p-4 text-xs text-lime-300 leading-relaxed">
               <span className="font-bold uppercase tracking-wider block mb-1">
                 Access Control Policy:
@@ -162,7 +162,7 @@ export const MemberAuthModal: React.FC<MemberAuthModalProps> = ({
           </div>
         ) : (
           /* Step 2: Story Submission Form */
-          <form onSubmit={handleSubmitStory} className="p-6 sm:p-8 space-y-4 max-h-[75vh] overflow-y-auto">
+          <form onSubmit={handleSubmitStory} className="p-6 sm:p-8 space-y-4 flex-1 min-h-0 overflow-y-auto">
             <div className="flex items-center gap-2 text-xs text-lime-400 font-bold">
               <UserCheck size={16} />
               <span>Verified Certified Member: {memberId || 'TITAN-ATHLETE'}</span>

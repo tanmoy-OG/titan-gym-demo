@@ -146,15 +146,15 @@ export default function BlogPage() {
         {/* Full-Page Detailed Story Modal */}
         {activeStoryModal && (
           <div
-            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6"
             onClick={() => setActiveStoryModal(null)}
           >
             <div
-              className="bg-[#0f111a] border border-white/10 rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl relative my-8"
+              className="bg-[#0f111a] border border-white/10 rounded-3xl max-w-3xl w-full max-h-[90vh] sm:max-h-[88vh] flex flex-col overflow-hidden shadow-2xl relative"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="relative h-64 sm:h-80 w-full overflow-hidden">
+              <div className="relative h-48 sm:h-60 w-full shrink-0 overflow-hidden">
                 <ImageWithFallback
                   src={activeStoryModal.afterImage}
                   alt={activeStoryModal.name}
@@ -165,12 +165,12 @@ export default function BlogPage() {
                 
                 <button
                   onClick={() => setActiveStoryModal(null)}
-                  className="absolute top-4 right-4 p-2 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 text-white z-10"
+                  className="absolute top-4 right-4 p-2 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 text-white z-10 transition-colors"
                 >
                   <X size={18} />
                 </button>
 
-                <div className="absolute bottom-6 left-6 right-6">
+                <div className="absolute bottom-4 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="px-2.5 py-0.5 rounded bg-lime-400 text-black font-black text-[10px] uppercase font-mono">
                       {activeStoryModal.duration} Journey
@@ -181,14 +181,14 @@ export default function BlogPage() {
                       ))}
                     </div>
                   </div>
-                  <h2 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">
+                  <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">
                     {activeStoryModal.name}&apos;s Transformation
                   </h2>
                 </div>
               </div>
 
               {/* Modal Body */}
-              <div className="p-6 sm:p-8 space-y-6 max-h-[60vh] overflow-y-auto">
+              <div className="p-5 sm:p-8 space-y-6 flex-1 min-h-0 overflow-y-auto">
                 {/* Quote */}
                 <div className="bg-lime-400/5 border-l-2 border-lime-400 p-4 rounded-r-xl">
                   <p className="text-sm sm:text-base italic text-zinc-200">
@@ -265,7 +265,7 @@ export default function BlogPage() {
               </div>
 
               {/* Footer CTA */}
-              <div className="p-6 border-t border-white/10 bg-black/40 flex items-center justify-between">
+              <div className="shrink-0 p-4 sm:p-6 border-t border-white/10 bg-black/40 flex items-center justify-between">
                 <span className="text-xs text-zinc-400">Inspired by {activeStoryModal.name}?</span>
                 <a
                   href="/programs"

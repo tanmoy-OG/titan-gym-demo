@@ -9,7 +9,6 @@ import ImageWithFallback from '@/components/ImageWithFallback';
 import ScrollZoomSection from '@/components/ScrollZoomSection';
 import TransformationCard from '@/components/TransformationSlider';
 import BranchSlider from '@/components/BranchSlider';
-import SearchGroundingWidget from '@/components/SearchGroundingWidget';
 import {
   MINIMAL_PROGRAMS,
   DETAILED_SUBSCRIPTIONS,
@@ -23,15 +22,56 @@ import {
   Sparkles,
   Phone,
   Mail,
-  MessageSquare,
   ShieldCheck,
   Send,
   CheckCircle2,
 } from 'lucide-react';
+import WhatsAppIcon from '@/components/WhatsAppIcon';
+
+const getDetailedTierStyles = (planId: string) => {
+  if (planId === 'silver-plan') {
+    return {
+      cardBg: 'bg-gradient-to-br from-[#181c26] via-[#10131b] to-[#141722]',
+      radialGlow: 'radial-gradient(circle at 85% 15%, rgba(203, 213, 225, 0.14) 0%, transparent 60%)',
+      border: 'border-slate-400/35 hover:border-slate-300/80',
+      shimmerClass: 'animate-shimmer-silver',
+      shimmerGradient: 'bg-gradient-to-r from-transparent via-white/20 to-transparent',
+      shadow: 'shadow-[0_4px_30px_rgba(0,0,0,0.5),0_0_20px_rgba(203,213,225,0.08)] hover:shadow-[0_0_35px_rgba(203,213,225,0.22)]',
+    };
+  }
+  if (planId === 'gold-plan') {
+    return {
+      cardBg: 'bg-gradient-to-br from-[#271d0e] via-[#151108] to-[#20180a]',
+      radialGlow: 'radial-gradient(circle at 85% 15%, rgba(245, 158, 11, 0.22) 0%, transparent 60%)',
+      border: 'border-amber-500/45 hover:border-amber-400/90',
+      shimmerClass: 'animate-shimmer-gold',
+      shimmerGradient: 'bg-gradient-to-r from-transparent via-amber-200/25 to-transparent',
+      shadow: 'shadow-[0_4px_30px_rgba(0,0,0,0.5),0_0_25px_rgba(245,158,11,0.16)] hover:shadow-[0_0_40px_rgba(251,191,36,0.32)] ring-1 ring-amber-400/30',
+    };
+  }
+  return {
+    cardBg: 'bg-gradient-to-br from-[#0e2034] via-[#091321] to-[#12263d]',
+    radialGlow: 'radial-gradient(circle at 85% 15%, rgba(56, 189, 248, 0.22) 0%, transparent 60%)',
+    border: 'border-cyan-400/45 hover:border-cyan-300/90',
+    shimmerClass: 'animate-shimmer-platinum',
+    shimmerGradient: 'bg-gradient-to-r from-transparent via-cyan-100/25 to-transparent',
+    shadow: 'shadow-[0_4px_30px_rgba(0,0,0,0.5),0_0_25px_rgba(56,189,248,0.16)] hover:shadow-[0_0_40px_rgba(56,189,248,0.32)]',
+  };
+};
 
 export default function HomePage() {
   const [contactSubmitted, setContactSubmitted] = useState(false);
   const [contactForm, setContactForm] = useState({ name: '', email: '', phone: '', goal: 'Strength & Conditioning' });
+  const heroVideoRef = React.useRef<HTMLVideoElement>(null);
+
+  React.useEffect(() => {
+    if (heroVideoRef.current) {
+      heroVideoRef.current.playbackRate = 1.0;
+      heroVideoRef.current.play().catch(() => {
+        // Fallback if browser requires user interaction for autoplay
+      });
+    }
+  }, []);
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,26 +92,23 @@ export default function HomePage() {
           {/* Cinematic Background Video / Overlay */}
           <div className="absolute inset-0 z-0">
             <video
+              ref={heroVideoRef}
               autoPlay
               loop
               muted
               playsInline
+              preload="auto"
               poster="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop"
               className="w-full h-full object-cover scale-105"
             >
-              {/* High quality royalty-free athletic video loops */}
-              <source
-                src="https://assets.mixkit.co/videos/preview/mixkit-athlete-working-out-with-a-barbell-in-a-gym-44026-large.mp4"
-                type="video/mp4"
-              />
-              <source
-                src="https://assets.mixkit.co/videos/preview/mixkit-man-training-with-a-kettlebell-in-a-gym-44027-large.mp4"
-                type="video/mp4"
-              />
+              {/* High-octane athletic training & gym workout video loop */}
+              <source src="/videos/hero-workout-720p.mp4" type="video/mp4" />
+              <source src="/videos/hero-workout.mp4" type="video/mp4" />
+              <source src="https://som-fitness.vercel.app/hero-video.mp4" type="video/mp4" />
             </video>
-            {/* Scrim Overlays */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#08090d] via-[#08090d]/65 to-black/75" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#08090d]/50 to-[#08090d]" />
+            {/* Scrim Overlays - calibrated for cinematic contrast and video dynamism */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#08090d] via-[#08090d]/45 to-black/65" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-[#08090d]/35 to-[#08090d]" />
           </div>
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
@@ -109,7 +146,7 @@ export default function HomePage() {
             </div>
 
             {/* Social Trust Metrics */}
-            <div className="mt-16 pt-8 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-left">
+            <div className="mt-16 pt-8 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-center">
               <div className="space-y-1">
                 <p className="text-2xl sm:text-3xl font-black text-white font-mono tabular-nums">14+ Years</p>
                 <p className="text-xs text-zinc-400 uppercase tracking-wider">Heritage of Strength</p>
@@ -158,18 +195,32 @@ export default function HomePage() {
               {MINIMAL_PROGRAMS.map((prog) => (
                 <div
                   key={prog.tier}
-                  className={`bg-[#0f111a] rounded-2xl p-8 border ${prog.border} shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group`}
+                  className={`relative overflow-hidden rounded-2xl p-8 border ${prog.border} ${prog.cardBg} ${prog.shadowGlow} hover:-translate-y-1.5 transition-all duration-500 flex flex-col justify-between group`}
                 >
-                  <div className="space-y-4">
+                  {/* Subtle Ambient Radial Glow */}
+                  <div
+                    className="pointer-events-none absolute inset-0 opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{ background: prog.radialGlow }}
+                  />
+
+                  {/* Metallic Shimmer Sweep Light Beam */}
+                  <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                    <div
+                      className={`absolute -top-12 -bottom-12 w-48 ${prog.shimmerGradient} ${prog.shimmerClass} blur-[1px] opacity-75 group-hover:opacity-100 transition-opacity duration-300`}
+                    />
+                  </div>
+
+                  {/* Card Content */}
+                  <div className="relative z-10 space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono font-bold uppercase tracking-widest text-zinc-400">
+                      <span className={`text-xs font-mono font-bold uppercase tracking-widest ${prog.accentText}`}>
                         {prog.highlight}
                       </span>
-                      <span className={`w-3 h-3 rounded-full bg-gradient-to-r ${prog.color}`} />
+                      <span className={`w-3 h-3 rounded-full bg-gradient-to-r ${prog.color} ${prog.dotGlow}`} />
                     </div>
 
                     {/* Program Name */}
-                    <h3 className="text-2xl font-black text-white uppercase tracking-tight group-hover:text-lime-400 transition-colors">
+                    <h3 className={`text-2xl font-black text-white uppercase tracking-tight ${prog.accentHover} transition-colors`}>
                       {prog.title}
                     </h3>
 
@@ -179,11 +230,11 @@ export default function HomePage() {
                     </p>
                   </div>
 
-                  <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
-                    <span className="text-xs text-zinc-500 font-medium">All-Inclusive Pass</span>
+                  <div className="relative z-10 mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
+                    <span className="text-xs text-zinc-400 font-medium">All-Inclusive Pass</span>
                     <Link
                       href="/programs"
-                      className="text-xs font-bold text-lime-400 hover:text-lime-300 flex items-center gap-1 group/btn"
+                      className={`text-xs font-bold ${prog.accentText} hover:brightness-125 flex items-center gap-1 group/btn`}
                     >
                       <span>View Program</span>
                       <ArrowRight size={13} className="group-hover/btn:translate-x-1 transition-transform" />
@@ -354,106 +405,122 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-              {DETAILED_SUBSCRIPTIONS.map((plan) => (
-                <div
-                  key={plan.id}
-                  className={`bg-[#0f111a] rounded-3xl overflow-hidden border ${
-                    plan.popular
-                      ? 'border-lime-400/50 shadow-[0_0_30px_rgba(163,230,53,0.15)] ring-1 ring-lime-400/30'
-                      : 'border-white/10 shadow-xl'
-                  } flex flex-col justify-between group hover:border-lime-400/40 transition-all`}
-                >
-                  <div>
-                    {/* Plan Specific Banner */}
-                    <div className="relative h-48 w-full overflow-hidden">
-                      <ImageWithFallback
-                        src={plan.image}
-                        alt={`${plan.name} Plan Banner`}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+              {DETAILED_SUBSCRIPTIONS.map((plan) => {
+                const styles = getDetailedTierStyles(plan.id);
+                return (
+                  <div
+                    key={plan.id}
+                    className={`relative rounded-3xl overflow-hidden border ${styles.border} ${styles.cardBg} ${styles.shadow} flex flex-col justify-between group hover:-translate-y-1.5 transition-all duration-500`}
+                  >
+                    {/* Subtle Ambient Radial Glow */}
+                    <div
+                      className="pointer-events-none absolute inset-0 opacity-80 group-hover:opacity-100 transition-opacity duration-500"
+                      style={{ background: styles.radialGlow }}
+                    />
+
+                    {/* Metallic Shimmer Sweep Light Beam */}
+                    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                      <div
+                        className={`absolute -top-12 -bottom-12 w-48 ${styles.shimmerGradient} ${styles.shimmerClass} blur-[1px] opacity-70 group-hover:opacity-100 transition-opacity duration-300`}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0f111a] via-[#0f111a]/50 to-transparent" />
-                      
-                      <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-                        <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-black/80 backdrop-blur-md text-white border border-white/20">
-                          {plan.badge}
-                        </span>
-                        {plan.popular && (
-                          <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-lime-400 text-black shadow-md">
-                            Best Value
+                    </div>
+
+                    <div className="relative z-10">
+                      {/* Plan Specific Banner */}
+                      <div className="relative h-48 w-full overflow-hidden">
+                        <ImageWithFallback
+                          src={plan.image}
+                          alt={`${plan.name} Plan Banner`}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#10131b] via-[#10131b]/60 to-transparent" />
+                        
+                        <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+                          <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-black/80 backdrop-blur-md text-white border border-white/20">
+                            {plan.badge}
                           </span>
-                        )}
+                          {plan.popular && (
+                            <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-amber-400 text-black shadow-md">
+                              Best Value
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="absolute bottom-4 left-6">
+                          <h3 className="text-3xl font-black text-white uppercase tracking-tight">
+                            {plan.name}
+                          </h3>
+                        </div>
                       </div>
 
-                      <div className="absolute bottom-4 left-6">
-                        <h3 className="text-3xl font-black text-white uppercase tracking-tight">
-                          {plan.name}
-                        </h3>
+                      {/* Price and Inclusions */}
+                      <div className="p-6 sm:p-8 space-y-6">
+                        <div className="space-y-1">
+                          <div className="flex items-baseline gap-2 whitespace-nowrap">
+                            <span className="text-4xl sm:text-5xl font-black text-white font-mono tabular-nums tracking-tight">
+                              ₹{plan.monthlyPrice.toLocaleString('en-IN')}
+                            </span>
+                            <span className="text-xs text-zinc-300 font-bold uppercase tracking-wider">
+                              / month
+                            </span>
+                          </div>
+                          <p className="text-[11px] font-mono text-zinc-400">
+                            ₹{plan.annualPrice.toLocaleString('en-IN')} / mo if billed annually (Save ~20%)
+                          </p>
+                        </div>
+
+                        <p className="text-xs text-zinc-300 leading-relaxed">
+                          {plan.tagline}
+                        </p>
+
+                        {/* Features List with Colored Tick Bullet Points */}
+                        <div className="space-y-3 pt-2">
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 block">
+                            Included Privileges:
+                          </span>
+                          <ul className="space-y-3">
+                            {plan.features.map((feat, idx) => (
+                              <li key={idx} className="flex items-start gap-2.5 text-xs text-zinc-200">
+                                <ColoredTick color={plan.id === 'gold-plan' ? 'amber' : plan.id === 'silver-plan' ? 'slate' : 'cyan'} size="sm" className="mt-0.5" />
+                                <span className="leading-snug">{feat}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Price and Inclusions */}
-                    <div className="p-6 sm:p-8 space-y-6">
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-4xl sm:text-5xl font-black text-white font-mono tabular-nums">
-                          ${plan.monthlyPrice}
-                        </span>
-                        <span className="text-xs text-zinc-400 uppercase tracking-wider">
-                          / month
-                        </span>
-                      </div>
+                    {/* Buttons per spec: "Buy Now" & "Learn More" */}
+                    <div className="relative z-10 p-6 sm:p-8 pt-0 space-y-3">
+                      <Link
+                        href={`/payment?plan=${plan.id}`}
+                        className={`w-full py-3.5 rounded-xl font-black uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2 ${
+                          plan.id === 'gold-plan'
+                            ? 'bg-amber-400 hover:bg-amber-300 text-black shadow-[0_0_20px_rgba(245,158,11,0.3)]'
+                            : plan.id === 'silver-plan'
+                            ? 'bg-slate-200 hover:bg-white text-black shadow-[0_0_20px_rgba(203,213,225,0.2)]'
+                            : 'bg-cyan-400 hover:bg-cyan-300 text-black shadow-[0_0_20px_rgba(56,189,248,0.3)]'
+                        }`}
+                      >
+                        <span>Buy Now</span>
+                        <ArrowRight size={14} />
+                      </Link>
 
-                      <p className="text-xs text-zinc-300 leading-relaxed">
-                        {plan.tagline}
-                      </p>
-
-                      {/* Features List with Colored Tick Bullet Points */}
-                      <div className="space-y-3 pt-2">
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 block">
-                          Included Privileges:
-                        </span>
-                        <ul className="space-y-3">
-                          {plan.features.map((feat, idx) => (
-                            <li key={idx} className="flex items-start gap-2.5 text-xs text-zinc-200">
-                              <ColoredTick color="lime" size="sm" className="mt-0.5" />
-                              <span className="leading-snug">{feat}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      <a
+                        href="/plan-page"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white font-bold uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-1.5"
+                      >
+                        <span>Learn More</span>
+                        <span className="text-zinc-500 font-mono text-[10px]">↗</span>
+                      </a>
                     </div>
                   </div>
-
-                  {/* Buttons per spec: "Buy Now" & "Learn More" */}
-                  <div className="p-6 sm:p-8 pt-0 space-y-3">
-                    <Link
-                      href={`/payment?plan=${plan.id}`}
-                      className="w-full py-3.5 rounded-xl bg-lime-400 hover:bg-lime-300 text-black font-black uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(163,230,53,0.3)]"
-                    >
-                      <span>Buy Now</span>
-                      <ArrowRight size={14} />
-                    </Link>
-
-                    <a
-                      href="/plan-page"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white font-bold uppercase tracking-wider text-xs transition-all flex items-center justify-center gap-1.5"
-                    >
-                      <span>Learn More</span>
-                      <span className="text-zinc-500 font-mono text-[10px]">↗</span>
-                    </a>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
-          </div>
-        </section>
-
-        {/* Live Search Grounding Widget: Ask Titan Sports Science */}
-        <section className="py-20 bg-[#06070a] border-b border-white/5">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <SearchGroundingWidget />
           </div>
         </section>
 
@@ -508,13 +575,13 @@ export default function HomePage() {
 
                 {/* WhatsApp Card: Standout / Highlighted design per specification */}
                 <div className="relative overflow-hidden bg-gradient-to-br from-emerald-950 via-[#0a2016] to-[#07130d] border-2 border-emerald-400/60 rounded-2xl p-7 shadow-[0_0_35px_rgba(52,211,153,0.25)] group hover:border-emerald-300 transition-all">
-                  <div className="absolute top-0 right-0 p-4 opacity-10">
-                    <MessageSquare size={120} className="text-emerald-400" />
+                  <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+                    <WhatsAppIcon size={120} className="text-emerald-400" />
                   </div>
                   
                   <div className="relative z-10 space-y-4">
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-400 text-black text-[11px] font-black uppercase tracking-wider">
-                      <MessageSquare size={12} />
+                      <WhatsAppIcon size={13} className="shrink-0" />
                       <span>Instant VIP Support</span>
                     </div>
 
@@ -531,9 +598,9 @@ export default function HomePage() {
                       href={`https://wa.me/${GYM_INFO.whatsappNumber.replace(/[^0-9]/g, '')}?text=Hello%20Titan%20Athletic%20Club%2C%20I%20would%20like%20to%20learn%20more%20about%20membership%20and%20claim%20a%20guest%20pass.`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-black font-black uppercase tracking-wider text-xs transition-all shadow-[0_0_20px_rgba(52,211,153,0.4)]"
+                      className="inline-flex items-center justify-center gap-2.5 w-full py-3.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-black font-black uppercase tracking-wider text-xs transition-all shadow-[0_0_20px_rgba(52,211,153,0.4)] group"
                     >
-                      <MessageSquare size={16} />
+                      <WhatsAppIcon size={18} className="shrink-0 transition-transform group-hover:scale-110" />
                       <span>Open WhatsApp Chat ({GYM_INFO.whatsappDisplay})</span>
                     </a>
                   </div>
