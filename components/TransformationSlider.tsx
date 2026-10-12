@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Star, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import React from 'react';
+import { Star, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import ImageWithFallback from './ImageWithFallback';
 import { TransformationItem } from '@/data/gymData';
@@ -11,38 +11,25 @@ interface TransformationCardProps {
 }
 
 export const TransformationCard: React.FC<TransformationCardProps> = ({ item }) => {
-  const [sliderPosition, setSliderPosition] = useState(50);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleSliderMove = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
-    const percent = Math.max(5, Math.min(95, (x / rect.width) * 100));
-    setSliderPosition(percent);
-  };
-
   return (
     <div className="bg-[#0f1118] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col group hover:border-lime-500/30 transition-all">
-      {/* Interactive Before / After Split with Slider */}
-      <div
-        className="relative w-full aspect-[4/3] overflow-hidden select-none cursor-ew-resize bg-black"
-        onMouseMove={(e) => isDragging && handleSliderMove(e)}
-        onTouchMove={(e) => isDragging && handleSliderMove(e)}
-        onMouseDown={(e) => {
-          setIsDragging(true);
-          handleSliderMove(e);
-        }}
-        onTouchStart={(e) => {
-          setIsDragging(true);
-          handleSliderMove(e);
-        }}
-        onMouseUp={() => setIsDragging(false)}
-        onTouchEnd={() => setIsDragging(false)}
-        onMouseLeave={() => setIsDragging(false)}
-      >
-        {/* AFTER Image (Full container underneath) */}
-        <div className="absolute inset-0">
+      {/* Before / After Split with Simple Divider */}
+      <div className="relative w-full aspect-[4/3] grid grid-cols-2 overflow-hidden bg-black select-none">
+        {/* BEFORE Image (Left Half) */}
+        <div className="relative h-full overflow-hidden">
+          <ImageWithFallback
+            src={item.beforeImage}
+            alt={`${item.name} Before Transformation`}
+            fill
+            className="object-cover"
+          />
+          <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded border border-white/20 z-10">
+            BEFORE
+          </div>
+        </div>
+
+        {/* AFTER Image (Right Half) */}
+        <div className="relative h-full overflow-hidden">
           <ImageWithFallback
             src={item.afterImage}
             alt={`${item.name} After Transformation`}
@@ -54,42 +41,8 @@ export const TransformationCard: React.FC<TransformationCardProps> = ({ item }) 
           </div>
         </div>
 
-        {/* BEFORE Image (Clipped overlay on top) */}
-        <div
-          className="absolute inset-y-0 left-0 overflow-hidden"
-          style={{ width: `${sliderPosition}%` }}
-        >
-          <div className="relative w-full h-full min-w-[280px]">
-            <ImageWithFallback
-              src={item.beforeImage}
-              alt={`${item.name} Before Transformation`}
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded border border-white/20 z-10">
-            BEFORE
-          </div>
-        </div>
-
-        {/* Divider Bar & Handle */}
-        <div
-          className="absolute inset-y-0 w-0.5 bg-lime-400 pointer-events-none shadow-[0_0_12px_rgba(163,230,53,0.8)]"
-          style={{ left: `${sliderPosition}%` }}
-        >
-          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-black/90 border-2 border-lime-400 flex items-center justify-center text-lime-400 shadow-xl">
-            <div className="flex items-center -space-x-1">
-              <ChevronLeft size={14} />
-              <ChevronRight size={14} />
-            </div>
-          </div>
-        </div>
-
-        <div className="absolute bottom-2 inset-x-0 text-center pointer-events-none">
-          <span className="text-[10px] uppercase font-mono tracking-wider px-2 py-0.5 rounded bg-black/60 text-zinc-300 backdrop-blur-sm">
-            Drag to compare
-          </span>
-        </div>
+        {/* Simple Vertical Divider */}
+        <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-0.5 bg-lime-400 shadow-[0_0_8px_rgba(163,230,53,0.7)] z-20 pointer-events-none" />
       </div>
 
       {/* Card Content Details */}
