@@ -70,3 +70,9 @@ body {
   animation-delay: 3.2s;
 }
 
+/* Prevent accidental ghost dragging of images across browsers */
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+}
+

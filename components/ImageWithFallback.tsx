@@ -42,6 +42,7 @@ export const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
       src={src}
       alt={alt}
       fill={fill}
+      draggable={false}
       referrerPolicy="no-referrer"
       onError={() => setHasError(true)}
       className={className}
